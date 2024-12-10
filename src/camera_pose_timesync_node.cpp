@@ -25,7 +25,7 @@ CameraPoseTimesyncNode::CameraPoseTimesyncNode()
     this->n.param<std::string>("odom_topic_2", odom_topic_2, "odom_topic_2");
     this->n.param<std::string>("imu_topic_1", imu_topic_1, "imu_topic_1");
     this->n.param<std::string>("imu_topic_2", imu_topic_2, "imu_topic_2");
-    this->n.param<std::string>("output_topic", output_topic, "output_topic");)
+    this->n.param<std::string>("output_topic", output_topic, "output_topic");
 
     this->image_sub1 = this->n.subscribe(image_topic_1, 1, &CameraPoseTimesyncNode::image1Callback, this);
     this->image_sub2 = this->n.subscribe(image_topic_2, 1, &CameraPoseTimesyncNode::image2Callback, this);
@@ -33,6 +33,8 @@ CameraPoseTimesyncNode::CameraPoseTimesyncNode()
     this->odom_sub2 = this->n.subscribe(odom_topic_2, 1, &CameraPoseTimesyncNode::odom2Callback, this);
     this->imu_sub1 = this->n.subscribe(imu_topic_1, 1, &CameraPoseTimesyncNode::imu1Callback, this);
     this->imu_sub2 = this->n.subscribe(imu_topic_2, 1, &CameraPoseTimesyncNode::imu2Callback, this);
+
+    this->pub = this->n.advertise<camera_pose_timesync::CombinedImagePose>(output_topic, 1);
 }
 
 CameraPoseTimesyncNode::~CameraPoseTimesyncNode()

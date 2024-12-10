@@ -1,0 +1,7 @@
+image_topic_1: "/image_1"
+image_topic_2: "/image_2"
+odom_topic_1: "/odom_1"
+odom_topic_2: "/odom_2"
+imu_topic_1: "/imu_1"
+imu_topic_2: "/imu_2"
+output_topic: "/output"

@@ -1,0 +1,5 @@
+<launch>
+    <node name="camera_pose_timesync" type="camera_pose_timesync_node" pkg="camera_pose_timesync" output="screen">
+        <rosparam file="$(find camera_pose_timesync)/config/topics.yaml" command="load"/>
+    </node>
+</launch>
