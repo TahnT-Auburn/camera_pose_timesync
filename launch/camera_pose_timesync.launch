@@ -1,4 +1,8 @@
 <launch>
+    <node pkg="rosbag" type="record" name="rosbag_recorder" 
+        args="record -O /media/tahnt/T7\ Touch/Tahn/2025_04_22/synced_data/synced_set1_2025-04-22-12-40-34 /synced_output"/>
+    <node pkg="rosbag" type="play" name="bag_player" output="screen" 
+        args="/media/tahnt/T7\ Touch/Tahn/2025_04_22/set1_2025-04-22-12-40-34.bag"/>
     <node name="camera_pose_timesync" type="camera_pose_timesync_node" pkg="camera_pose_timesync" output="screen">
         <rosparam file="$(find camera_pose_timesync)/config/topics.yaml" command="load"/>
     </node>
