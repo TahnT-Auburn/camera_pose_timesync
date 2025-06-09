@@ -21,7 +21,7 @@ class CameraPoseTimesyncNode
     ros::Subscriber image_sub2;
     ros::Subscriber odom_sub1;
     ros::Subscriber odom_sub2;
-    // ros::Subscriber imu_sub1;
+    ros::Subscriber imu_sub1;
     // ros::Subscriber imu_sub2;
 
     ros::Publisher pub;
@@ -30,7 +30,7 @@ class CameraPoseTimesyncNode
     bool recv_image_2;
     bool recv_odom_1;
     bool recv_odom_2;
-    // bool recv_imu_1;
+    bool recv_imu_1;
     // bool recv_imu_2;
 
     camera_pose_timesync::CombinedImagePose output_msg;
@@ -39,7 +39,7 @@ class CameraPoseTimesyncNode
     void image2Callback(const sensor_msgs::CompressedImage::ConstPtr &msg);
     void odom1Callback(const nav_msgs::Odometry::ConstPtr &msg);
     void odom2Callback(const nav_msgs::Odometry::ConstPtr &msg);
-    // void imu1Callback(const sensor_msgs::Imu::ConstPtr &msg);
+    void imu1Callback(const sensor_msgs::Imu::ConstPtr &msg);
     // void imu2Callback(const sensor_msgs::Imu::ConstPtr &msg);
 
     void publishData();

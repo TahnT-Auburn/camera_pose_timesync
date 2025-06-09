@@ -5,3 +5,5 @@ sensor_msgs/CompressedImage camera_2
 
 nav_msgs/Odometry odom_1
 nav_msgs/Odometry odom_2
+
+sensor_msgs/Imu imu_1
