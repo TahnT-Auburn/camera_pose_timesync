@@ -4,34 +4,47 @@ CameraPoseTimesyncNode::CameraPoseTimesyncNode()
 {
     this->recv_image_1 = false;
     this->recv_image_2 = false;
+    this->recv_image_3 = false;
     this->recv_odom_1 = false;
     this->recv_odom_2 = false;
     this->recv_imu_1 = false;
+    this->recv_steer = false;
+    this->recv_vel = false;
     // this->recv_imu_2 = false;
 
     this->n = ros::NodeHandle("~");
 
     std::string image_topic_1;
     std::string image_topic_2;
+    std::string image_topic_3;
     std::string odom_topic_1;
     std::string odom_topic_2;
     std::string imu_topic_1;
+    std::string steer_topic;
+    std::string vel_topic;
+
     // std::string imu_topic_2;
     std::string output_topic;
 
     this->n.param<std::string>("image_topic_1", image_topic_1, "image_topic_1");
     this->n.param<std::string>("image_topic_2", image_topic_2, "image_topic_2");
+    this->n.param<std::string>("image_topic_3", image_topic_3, "image_topic_3");
     this->n.param<std::string>("odom_topic_1", odom_topic_1, "odom_topic_1");
     this->n.param<std::string>("odom_topic_2", odom_topic_2, "odom_topic_2");
     this->n.param<std::string>("imu_topic_1", imu_topic_1, "imu_topic_1");
+    this->n.param<std::string>("steer_topic", steer_topic, "steer_topic");
+    this->n.param<std::string>("vel_topic", vel_topic, "vel_topic");
     // this->n.param<std::string>("imu_topic_2", imu_topic_2, "imu_topic_2");
     this->n.param<std::string>("output_topic", output_topic, "output_topic");
 
     this->image_sub1 = this->n.subscribe(image_topic_1, 1, &CameraPoseTimesyncNode::image1Callback, this);
     this->image_sub2 = this->n.subscribe(image_topic_2, 1, &CameraPoseTimesyncNode::image2Callback, this);
+    this->image_sub3 = this->n.subscribe(image_topic_3, 1, &CameraPoseTimesyncNode::image3Callback, this);
     this->odom_sub1 = this->n.subscribe(odom_topic_1, 1, &CameraPoseTimesyncNode::odom1Callback, this);
     this->odom_sub2 = this->n.subscribe(odom_topic_2, 1, &CameraPoseTimesyncNode::odom2Callback, this);
     this->imu_sub1 = this->n.subscribe(imu_topic_1, 1, &CameraPoseTimesyncNode::imu1Callback, this);
+    this->steer_sub = this->n.subscribe(steer_topic, 1, &CameraPoseTimesyncNode::steerCallback, this);
+    this->vel_sub = this->n.subscribe(vel_topic, 1, &CameraPoseTimesyncNode::velCallback, this);
     // this->imu_sub2 = this->n.subscribe(imu_topic_2, 1, &CameraPoseTimesyncNode::imu2Callback, this);
 
     this->pub = this->n.advertise<camera_pose_timesync::CombinedImagePose>(output_topic, 1);
@@ -54,6 +67,14 @@ void CameraPoseTimesyncNode::image2Callback(const sensor_msgs::CompressedImage::
 {
     recv_image_2 = true;
     output_msg.camera_2 = *msg;
+
+    publishData();
+}
+
+void CameraPoseTimesyncNode::image3Callback(const sensor_msgs::CompressedImage::ConstPtr &msg)
+{
+    recv_image_3 = true;
+    output_msg.camera_3 = *msg;
 
     publishData();
 }
@@ -90,16 +111,36 @@ void CameraPoseTimesyncNode::imu1Callback(const sensor_msgs::Imu::ConstPtr &msg)
 //     publishData();
 // }
 
+void CameraPoseTimesyncNode::steerCallback(const j1939can::SteerAngle::ConstPtr &msg)
+{
+    recv_steer = true;
+    output_msg.steer = *msg;
+
+    publishData();
+}
+
+void CameraPoseTimesyncNode::velCallback(const j1939can::VehicleSpeed::ConstPtr &msg)
+{
+    recv_vel = true;
+    output_msg.vel = *msg;
+
+    publishData();
+}
+
+
 void CameraPoseTimesyncNode::publishData()
 {
     // if (recv_imu_1 && recv_imu_2 && recv_odom_1 && recv_odom_2 && recv_image_1 && recv_image_2)
-    if (recv_odom_1 && recv_odom_2 && recv_image_1 && recv_image_2)
+    if (recv_odom_1 && recv_odom_2 && recv_image_1 && recv_image_2 && recv_image_3 && recv_imu_1 && recv_steer && recv_vel)
     {
         recv_image_1 = false;
         recv_image_2 = false;
+        recv_image_3 = false;
         recv_odom_1 = false;
         recv_odom_2 = false;
         recv_imu_1 = false;
+        recv_steer = false;
+        recv_vel = false;
         // recv_imu_2 = false;
 
         output_msg.header.stamp = ros::Time::now();

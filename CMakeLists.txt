@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   std_msgs
+  j1939can
 )
 
 ## System dependencies are found with CMake's conventions
@@ -78,6 +79,7 @@ generate_messages(
   nav_msgs  
   sensor_msgs  
   std_msgs
+  j1939can
 )
 
 ################################################
@@ -110,6 +112,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
+  CATKIN_DEPENDS j1939can
 #  INCLUDE_DIRS include
 #  LIBRARIES camera_pose_timesync
 #  CATKIN_DEPENDS geometry_msgs message_generation message_runtime nav_msgs roscpp rospy sensor_msgs std_msgs
